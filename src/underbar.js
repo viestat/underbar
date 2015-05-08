@@ -104,7 +104,6 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var res = [];
-    var temp = false;
     if(arguments[1] === true){
       _.each(array, function(a, b){
         if(a !== array[b + 1]){
@@ -112,7 +111,12 @@
         }
       });
     } else {
-      //missing!
+      res.push(array[0]);
+      for(var i = 1; i < array.length; i++){
+        if(_.indexOf(res,array[i]) === -1){
+          res.push(array[i])
+        }
+      }
     }
 
     return res;
@@ -180,6 +184,20 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var res;
+    if(accumulator === undefined){
+      res = collection[0];
+      for(var i = 1; i < collection.length; i++){
+        res = iterator(res, collection[i]);
+      }
+    } else {
+      res = accumulator;
+      _.each(collection, function(a){
+      res = iterator(res, a);
+    });
+    }
+    
+    return res;
   };
 
   // Determine if the array or object contains a given value (using `===`).
